@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portal Ventas · Videla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="/" aria-label="Videla Estudio Jurídico, Central de Gestión">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-word"><b>VIDELA</b><small>Estudio Jurídico</small></span>
+    </a>
+    <span class="bar-title">Equipo comercial</span>
+    <nav class="bar-nav" aria-label="Secciones">
+      <a class="back" href="/">← Central de Gestión</a>
+      <a href="#portales">Portales</a>
+      <a href="#info">Información útil</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas id="keys" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <h1>Portal Ventas</h1>
+    <span class="line" aria-hidden="true"></span>
+  </div>
+</section>
+<div class="crumb"><a href="/">Central de Gestión</a> / Equipo comercial</div>
+<main>
+  <section class="intro">
+    <h2>GENERAL</h2>
+    <p>A continuación encontrarás todos los accesos, repositorios e información útil para la gestión de ventas.</p>
+  </section>
+
+  <section class="sec" id="portales">
+    <h3>Portales, documentos y repositorios comunes</h3>
+    <ul class="grid" id="grid"></ul>
+    <ul class="docs" id="docs"></ul>
+  </section>
+
+  <section class="sec info" id="info">
+    <h3>Información Útil</h3>
+    <dl>
+      <div><dt>Sitio web estudio:</dt><dd><a href="https://www.estudiojuridicovidela.com/" target="_blank" rel="noopener">https://www.estudiojuridicovidela.com/</a></dd></div>
+      <div><dt>Atención al cliente:</dt><dd id="mail"><a href="mailto:atencionalcliente@estudiojuridicovidela.com">atencionalcliente@estudiojuridicovidela.com</a></dd><dd><button class="copy" id="copyMail" type="button">Copiar</button></dd></div>
+    </dl>
+  </section>
+
+<script>
+/* ── Accesos: editá aquí nombres y enlaces. url: null = enlace pendiente ── */
+window.ACCESOS = [
+ {
+  "name": "Registro de Inicios",
+  "url": "https://docs.google.com/forms/d/e/1FAIpQLSf7YK3U93BjWPmfYl-zgVpidMNxq9hGbTgefQsLpxw7baSJ5w/viewform",
+  "icon": "form"
+ },
+ {
+  "name": "Carpeta Inicios",
+  "url": "https://drive.google.com/drive/folders/19c06UEl64A8Sw0RWQNLPlXW4phGOdBNU",
+  "icon": "folder"
+ },
+ {
+  "name": "Webmail Estudio",
+  "url": "https://www.estudiojuridicovidela.com/webmail",
+  "icon": "mail"
+ },
+ {
+  "name": "Modelos",
+  "url": "https://drive.google.com/drive/folders/1U5yMALiZtWiiSoJHk5WE66m6aftYfsNR",
+  "icon": "models"
+ },
+ {
+  "name": "Central Inicios",
+  "url": "https://docs.google.com/spreadsheets/d/1QvRaXTu3I-PSPGGOsiyQhasFKjeeTomC9MU5x7_8RSY/edit",
+  "icon": "rocket"
+ },
+ {
+  "name": "Gestión Ventas",
+  "url": "https://docs.google.com/spreadsheets/d/1mm5WyWFCDHvpeuheLbc07jvg5QgglNiHSS3mk-LZ6Yg/edit",
+  "icon": "chart"
+ }
+];
+window.DOCS = [
+ {
+  "name": "Protocolo general",
+  "url": null
+ },
+ {
+  "name": "Templates de documentos",
+  "url": null
+ }
+];
+</script>
+</main>
+
+<footer><div><span>Videla · Estudio Jurídico</span><span>Uso interno del equipo</span></div></footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
