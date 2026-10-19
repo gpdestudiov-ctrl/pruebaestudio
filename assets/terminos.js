@@ -5,7 +5,7 @@
 (function(){
 const CONFIG = {
   /* Pegá acá la URL de la aplicación web de Apps Script (termina en /exec). */
-  endpoint: 'PEGAR_AQUI_URL_APPS_SCRIPT',
+  endpoint: 'https://script.google.com/macros/s/AKfycbyeNH0Td-aQBMap2c6Wo7wg7mMVSQcqUyRhnOJaAzn-yI4MVmjGY4acWJTVjP7V3VhReA/exec',
   /* Si cambian los términos, subí la versión: todos tendrán que volver a firmar. */
   version: '1.1',
   fechaVersion: '19 oct 2026'
