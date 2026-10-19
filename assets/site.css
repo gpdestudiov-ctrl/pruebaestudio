@@ -137,3 +137,43 @@ footer div{max-width:1180px;margin:0 auto;padding-block:22px;padding-inline:20px
 .frame{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;border:1px solid var(--rule)}
 .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .soon{margin-top:26px;display:inline-block;font-family:var(--display);font-weight:700;letter-spacing:.12em;color:var(--olive);border:1px solid var(--rule);border-radius:999px;padding:6px 16px}
+
+/* ── Términos de uso (modal de aceptación) ── */
+html.terms-open,html.terms-open body{overflow:hidden}
+.terms{position:fixed;inset:0;z-index:100;background:rgba(12,14,17,.72);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom))}
+.terms-card{background:var(--surface);color:var(--text);width:100%;max-width:760px;max-height:100%;border-radius:16px;overflow:auto;overscroll-behavior:contain;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.terms-wait,.terms-done{padding:40px 28px;text-align:center}
+.terms-done h2{font-family:var(--display);color:var(--olive);margin:0 0 8px}
+.terms-done .terms-btn{margin-top:18px}
+.terms-head{position:sticky;top:0;z-index:1;background:var(--surface);padding:22px 28px 16px;border-bottom:1px solid var(--rule)}
+.terms-head small{display:block;font-size:12.5px;letter-spacing:.06em;color:var(--muted)}
+.terms-head h2{font-family:var(--display);font-weight:700;color:var(--olive);font-size:clamp(22px,3.4vw,28px);line-height:1.15;margin:6px 0 0;text-wrap:balance}
+.terms-body{padding:8px 28px 18px;font-size:15.5px;line-height:1.6}
+.terms-body h3,.terms-form h3{font-family:var(--display);font-weight:700;font-size:18px;color:var(--text);margin:22px 0 6px}
+.terms-body p{margin:8px 0}
+.terms-body ul{margin:8px 0;padding-left:22px}
+.terms-body li{margin:4px 0}
+.terms-form{padding:4px 28px 22px;border-top:1px solid var(--rule);background:var(--tile-bg)}
+.terms-form h3{margin-top:14px}
+.terms-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:10px 0 14px}
+.terms-fields label{display:flex;flex-direction:column;gap:4px;font-size:13.5px;font-weight:600}
+.terms-fields .wide{grid-column:1/-1}
+.terms-fields input{font:inherit;font-weight:400;font-size:16px;color:var(--text);background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:9px 11px;min-width:0}
+.terms-fields input:focus{outline:2px solid var(--focus);outline-offset:0;border-color:transparent}
+.terms-check{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45}
+.terms-check input{width:18px;height:18px;margin-top:2px;flex:0 0 auto;accent-color:var(--olive)}
+.terms-fine{font-size:12.5px;color:var(--muted);margin:12px 0}
+.terms-fine b{color:var(--text);font-weight:600;word-break:break-all}
+.terms-error{color:#b3261e;font-size:14px;margin:8px 0}
+.terms-btn{font:inherit;font-family:var(--display);font-weight:700;letter-spacing:.06em;font-size:16px;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:11px 26px;cursor:pointer}
+.terms-btn:hover{background:var(--olive)}
+.terms-btn:disabled{opacity:.6;cursor:wait}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .terms-btn{background:var(--gold);color:#131417}}
+:root[data-theme="dark"] .terms-btn{background:var(--gold);color:#131417}
+@media (max-width:560px){
+  .terms{padding:0}
+  .terms-card{border-radius:0;height:100%}
+  .terms-head,.terms-body,.terms-form{padding-left:16px;padding-right:16px}
+  .terms-fields{grid-template-columns:1fr}
+}
+.terms-card:focus{outline:none}
