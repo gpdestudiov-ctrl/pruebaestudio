@@ -3,20 +3,21 @@
    url: null = enlace pendiente. Las URLs que empiezan con "/" son páginas de este sitio. */
 (function(){
 const S='stroke="var(--icon-stroke)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"';
+const SR=S.replace('var(--icon-stroke)','var(--icon-red)');
 const F='var(--icon-fill)', B='var(--icon-blue)', R='var(--icon-red)', W='var(--surface)';
 const ICONS = {
-  court:`<path d="M20 44 L50 26 L80 44 Z" fill="${F}" ${S}/><path d="M24 48h52M28 48v26M42 48v26M58 48v26M72 48v26M20 78h60M16 84h68" fill="none" ${S}/>`,
-  mail:`<rect x="16" y="30" width="68" height="46" rx="5" fill="${F}" ${S}/><path d="M16 34 L50 58 L84 34" fill="none" ${S}/><circle cx="72" cy="28" r="10" fill="${B}" ${S}/>`,
-  deal:`<path d="M14 50 L30 36 L46 42 L58 36 L86 50 L70 70 L50 72 L30 66 Z" fill="${F}" ${S}/><path d="M46 42 L38 54 Q44 58 52 50 L64 60" fill="none" ${S}/><circle cx="50" cy="22" r="9" fill="${B}" ${S}/>`,
-  case:`<rect x="30" y="16" width="44" height="60" rx="4" fill="${B}" ${S}/><rect x="24" y="22" width="44" height="60" rx="4" fill="${W}" ${S}/><path d="M32 40l4 4 8-8M32 56l4 4 8-8M50 42h10M50 58h10" fill="none" ${S}/><circle cx="26" cy="24" r="9" fill="${R}" ${S}/>`,
-  folder:`<path d="M16 30 h24 l6 7 h38 v41 h-68 Z" fill="${F}" ${S}/><path d="M22 44h56" fill="none" ${S}/><rect x="22" y="37" width="56" height="5" fill="${B}" opacity=".7"/>`,
-  social:`<circle cx="50" cy="40" r="16" fill="${F}" ${S}/><path d="M22 84 Q22 62 50 62 Q78 62 78 84" fill="${B}" ${S}/><path d="M44 40h12M50 34v12" fill="none" ${S}/>`,
-  tax:`<rect x="24" y="16" width="44" height="64" rx="4" fill="${W}" ${S}/><rect x="32" y="24" width="22" height="18" rx="2" fill="${R}" ${S}/><path d="M32 52h28M32 60h28M32 68h18" fill="none" ${S}/><circle cx="70" cy="72" r="13" fill="${F}" ${S}/><path d="M70 64v16M74 67q-4-3-8 0q0 4 4 5q4 1 4 5q-4 3-8 0" fill="none" stroke="var(--icon-stroke)" stroke-width="1.8" stroke-linecap="round"/>`,
-  client:`<path d="M14 72 L40 60 L66 64 L86 56 L86 66 L62 80 L32 82 Z" fill="${F}" ${S}/><circle cx="50" cy="36" r="9" fill="${B}" ${S}/><circle cx="30" cy="40" r="7" fill="${F}" ${S}/><circle cx="70" cy="40" r="7" fill="${F}" ${S}/><path d="M40 18l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1Z" fill="${F}" stroke="var(--icon-stroke)" stroke-width="1.6" stroke-linejoin="round"/><path d="M60 18l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1Z" fill="${F}" stroke="var(--icon-stroke)" stroke-width="1.6" stroke-linejoin="round"/>`,
-  request:`<path d="M26 82 h36 l-4 -10 h-28 Z" fill="${B}" ${S}/><path d="M32 72 Q30 50 40 40 L34 30 L50 30 Q62 40 58 72" fill="${B}" ${S}/><rect x="56" y="54" width="22" height="28" rx="3" fill="${F}" ${S}/><path d="M61 63h12M61 70h12M61 77h8" fill="none" ${S}/><path d="M62 22 q12 0 14 14" fill="none" ${S}/><path d="M72 32l4 4 4-5" fill="none" ${S}/>`,
-  track:`<path d="M24 82 h36 l-4 -10 h-28 Z" fill="${F}" ${S}/><path d="M30 72 Q28 50 38 40 L32 30 L48 30 Q60 40 56 72" fill="${F}" ${S}/><circle cx="68" cy="52" r="13" fill="${B}" ${S}/><path d="M77 62 L86 72" fill="none" ${S}/><path d="M62 52h11M69 48l4 4-4 4" fill="none" ${S}/>`,
-  learn:`<rect x="18" y="38" width="64" height="38" rx="4" fill="${B}" ${S}/><path d="M12 80h76" fill="none" ${S}/><path d="M50 20 L78 30 L50 40 L22 30 Z" fill="${F}" ${S}/><path d="M36 35v8 q14 8 28 0v-8" fill="none" ${S}/><path d="M28 60h20M28 67h30" fill="none" ${S}/>`,
-  coin:`<circle cx="58" cy="36" r="20" fill="${F}" ${S}/><path d="M58 24v24M64 28q-6-4-12 0q0 6 6 7q6 1 6 7q-6 4-12 0" fill="none" ${S}/><path d="M34 86 V60 Q34 54 40 54 L40 44 Q40 38 46 40 L46 70" fill="${W}" ${S}/><path d="M18 30h6M21 27v6M80 64h6M83 61v6" fill="none" ${S}/>`,
+  court:`<path d="M3 8 12 3 21 8Z" fill="${F}" ${S}/><path d="M5 11v7m7-7v7m7-7v7M4 21h16" fill="none" ${S}/>`,
+  mail:`<rect x="3" y="6" width="18" height="15" rx="3" fill="${F}" ${S}/><path d="m4 8 8 6 8-6" fill="none" ${S}/><circle cx="19" cy="5" r="3" fill="${B}" ${S}/>`,
+  deal:`<path d="M5 2.5h14a2.5 2.5 0 0 1 2.5 2.5v11a2.5 2.5 0 0 1-2.5 2.5H10L5 22v-3.5A2.5 2.5 0 0 1 2.5 16V5A2.5 2.5 0 0 1 5 2.5Z" fill="${F}" ${S}/><path d="M12 5.5v10M7 7.5h10m-7 8h4" fill="none" ${S}/><path d="m7 7.5-2.2 4q2.2 3 4.4 0Z" fill="${B}" ${S}/><path d="m17 7.5-2.2 4q2.2 3 4.4 0Z" fill="${B}" ${S}/>`,
+  case:`<rect x="7" y="2" width="14" height="18" rx="2" fill="${B}" ${S}/><rect x="3" y="5" width="14" height="17" rx="2" fill="${W}" ${S}/><path d="m6 10 1 1 2-2m-3 7 1 1 2-2" fill="none" ${SR}/><path d="M12 10h2m-2 6h2" fill="none" ${S}/>`,
+  folder:`<path d="M3 6a2 2 0 0 1 2-2h5l3 3h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" fill="${F}" ${S}/><circle cx="20" cy="6" r="3" fill="${R}" ${S}/>`,
+  social:`<circle cx="10" cy="7" r="4" fill="${F}" ${S}/><path d="M2 21v-1a8 6 0 0 1 16 0v1Z" fill="${B}" ${S}/><path d="M19.5 3v6m-3-3h6" fill="none" ${SR}/>`,
+  tax:`<rect x="3" y="2" width="15" height="20" rx="2" fill="${W}" ${S}/><rect x="6" y="5" width="8" height="3" rx="1" fill="${F}" ${S}/><path d="M6 11h8m-8 3h4" fill="none" ${S}/><path d="M6 18c1-3 2-3 2 0 1-2 2-2 3-1" fill="none" ${S}/><path d="m14 17 6-6q.7-.7 1.4 0l.6.6q.7.7 0 1.4l-6 6-3 1Z" fill="${B}" ${S}/><path d="m14 17 2 2-3 1Z" fill="${F}" ${S}/>`,
+  client:`<path d="M3 13V11a9 9 0 0 1 18 0v6a4 4 0 0 1-4 4h-3" fill="none" ${S}/><rect x="2" y="10" width="5" height="8" rx="2" fill="${B}" ${S}/><rect x="17" y="10" width="5" height="8" rx="2" fill="${B}" ${S}/><rect x="10" y="19" width="5" height="3" rx="1.5" fill="${R}" ${S}/>`,
+  request:`<rect x="4" y="3" width="16" height="19" rx="2" fill="${F}" ${S}/><rect x="9" y="2" width="6" height="4" rx="1" fill="${W}" ${S}/><path d="M8 10h8m-8 4h8m-8 4h5" fill="none" ${S}/>`,
+  track:`<rect x="4" y="3" width="16" height="19" rx="2" fill="${F}" ${S}/><rect x="9" y="2" width="6" height="4" rx="1" fill="${B}" ${S}/><path d="m7 10 1 1 2-2m-3 5 1 1 2-2m-3 5 1 1 2-2M13 10h4m-4 4h4m-4 4h4" fill="none" ${S}/>`,
+  learn:`<rect x="3" y="9" width="18" height="11" rx="2" fill="${B}" ${S}/><path d="M2 22h20" fill="none" ${S}/><path d="M7 10v4q5 4 10 0v-4" fill="${F}" ${S}/><path d="m2 7 10-5 10 5-10 5Z" fill="${F}" ${S}/><path d="M21 8v6" fill="none" ${SR}/>`,
+  coin:`<circle cx="12" cy="12" r="9" fill="${F}" ${S}/><path d="M15.5 8c-1-1.5-6.5-1.5-7 1-.7 3.5 7.7 2.5 7 6-.5 2.5-6 2.5-7 1M12 5v14" fill="none" ${S}/>`,
   /* nuevos */
   form:`<rect x="24" y="20" width="52" height="64" rx="5" fill="${W}" ${S}/><rect x="38" y="14" width="24" height="12" rx="3" fill="${B}" ${S}/><path d="M34 44l4 4 7-8M34 62l4 4 7-8M52 44h16M52 62h16" fill="none" ${S}/><circle cx="74" cy="78" r="10" fill="${F}" ${S}/><path d="M74 73v10M69 78h10" fill="none" ${S}/>`,
   models:`<rect x="34" y="14" width="42" height="56" rx="4" fill="${B}" ${S}/><rect x="28" y="20" width="42" height="56" rx="4" fill="${F}" ${S}/><rect x="22" y="26" width="42" height="58" rx="4" fill="${W}" ${S}/><path d="M30 40h26M30 48h26M30 56h18M30 66h26M30 74h14" fill="none" ${S}/>`,
@@ -27,7 +28,8 @@ const ICONS = {
   calc:`<rect x="26" y="14" width="48" height="72" rx="6" fill="${B}" ${S}/><rect x="33" y="22" width="34" height="16" rx="2" fill="${W}" ${S}/><path d="M56 30h6" fill="none" ${S}/><g fill="${F}" ${S}><rect x="33" y="46" width="9" height="8" rx="2"/><rect x="46" y="46" width="9" height="8" rx="2"/><rect x="59" y="46" width="8" height="8" rx="2"/><rect x="33" y="60" width="9" height="8" rx="2"/><rect x="46" y="60" width="9" height="8" rx="2"/><rect x="59" y="60" width="8" height="20" rx="2"/><rect x="33" y="72" width="22" height="8" rx="2"/></g>`,
 };
 
-function ico(name){return `<svg class="ico" viewBox="0 0 100 100" aria-hidden="true">${ICONS[name]||''}</svg>`}
+const GRID24=new Set(['court','mail','deal','case','folder','social','tax','client','request','track','learn','coin']);
+function ico(name){const vb=GRID24.has(name)?'0 0 24 24':'0 0 100 100';return `<svg class="ico" viewBox="${vb}" aria-hidden="true">${ICONS[name]||''}</svg>`}
 function linkAttrs(url){return url.startsWith('/')||url.startsWith('#')?`href="${url}"`:`href="${url}" target="_blank" rel="noopener"`}
 
 const grid=document.getElementById('grid');
