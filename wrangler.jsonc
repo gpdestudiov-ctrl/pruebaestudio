@@ -1,0 +1,19 @@
+{
+  // Central de Gestión Videla: sitio estático + Worker que exige aceptar los Términos de uso
+  "name": "pruebaestudio",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "vars": {
+    "TERMS_VERSION": "1.1",
+    "APPS_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbyeNH0Td-aQBMap2c6Wo7wg7mMVSQcqUyRhnOJaAzn-yI4MVmjGY4acWJTVjP7V3VhReA/exec",
+    "ACCESS_TEAM_DOMAIN": "https://quiet-dust-a926.cloudflareaccess.com",
+    "ACCESS_AUD": "fed0495aabb8b94e6acdff3127fb77d295fd670198822876dbb56870e0bfd169"
+  }
+  // TERMS_SECRET se carga como secreto en el panel de Cloudflare (no va en el repositorio)
+}
