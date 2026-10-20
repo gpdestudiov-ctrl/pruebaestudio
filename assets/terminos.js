@@ -1,22 +1,12 @@
 /* Central de Gestión Videla — Términos de uso y acuerdo de confidencialidad.
-   Se muestra solo si hay sesión iniciada (Cloudflare Access) y esa cuenta todavía
-   no firmó la versión vigente. Los datos se guardan en Google Sheets mediante
-   un Apps Script publicado como aplicación web (ver apps-script/Codigo.gs). */
+   Esta página la entrega el Worker (worker.js) solo a quien inició sesión y
+   todavía no firmó la versión vigente. Al firmar, el Worker registra los datos
+   en Google Sheets y habilita el acceso al resto del sitio. */
 (function(){
-const CONFIG = {
-  /* Pegá acá la URL de la aplicación web de Apps Script (termina en /exec). */
-  endpoint: 'https://script.google.com/macros/s/AKfycbyeNH0Td-aQBMap2c6Wo7wg7mMVSQcqUyRhnOJaAzn-yI4MVmjGY4acWJTVjP7V3VhReA/exec',
-  /* Si cambian los términos, subí la versión: todos tendrán que volver a firmar. */
-  version: '1.1',
-  fechaVersion: '19 oct 2026'
-};
-
-const configured = /^https:\/\/script\.google\.com\//.test(CONFIG.endpoint);
-const KEY = email => `terminos:${CONFIG.version}:${email}`;
-const store = {
-  get(k){try{return localStorage.getItem(k)}catch(e){return null}},
-  set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-};
+const root = document.getElementById('terminos');
+if(!root) return;
+const ID = { email: root.dataset.email || '' };
+const CONFIG = { version: root.dataset.version || '', fechaVersion: '19 oct 2026' };
 
 const TEXT = `
 <p>Antes de acceder a la Central de Gestión te pedimos que leas y aceptes estos términos, que tienen validez de acuerdo entre vos y el Estudio Jurídico Videla (en adelante, "el Estudio").</p>
@@ -118,7 +108,6 @@ function overlay(){
   document.body.appendChild(o);document.documentElement.classList.add('terms-open');
   return o;
 }
-function close(o){o.remove();document.documentElement.classList.remove('terms-open')}
 
 function showForm(o,id){
   o.innerHTML=`<div class="terms-card" tabindex="-1">
@@ -150,18 +139,16 @@ function showForm(o,id){
     if(!f.checkValidity()){err.textContent='Completá todos los datos y marcá la casilla de aceptación.';err.hidden=false;f.reportValidity();return}
     const v=Object.fromEntries(new FormData(f));
     const payload={
-      action:'sign', email:id.email, version:CONFIG.version,
       nombre:v.nombre.trim(), dni:v.dni.replace(/\D/g,''), domicilio:v.domicilio.trim(),
       ciudadFecha:`${v.ciudad.trim()}, ${fmtDate(v.fecha)}`
     };
     btn.disabled=true;btn.textContent='Enviando…';
     try{
-      const r=await fetch(CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+      const r=await fetch('/api/terminos',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(payload)});
       const j=await r.json();
       if(!j.ok) throw new Error(j.error||'Error');
-      store.set(KEY(id.email),'1');
       o.querySelector('.terms-card').innerHTML=`<div class="terms-done"><h2>¡Listo, gracias!</h2><p>Tu aceptación quedó registrada.</p><button type="button" class="terms-btn">Entrar a la Central</button></div>`;
-      const b=o.querySelector('.terms-btn');b.focus();b.addEventListener('click',()=>close(o));
+      const b=o.querySelector('.terms-btn');b.focus();b.addEventListener('click',()=>location.reload());
     }catch(e){
       err.textContent='No pudimos registrar tu aceptación. Revisá tu conexión y probá de nuevo; si sigue fallando, avisá al Estudio.';
       err.hidden=false;btn.disabled=false;btn.textContent='Acepto y firmo';
@@ -169,29 +156,5 @@ function showForm(o,id){
   });
 }
 
-async function init(){
-  if(!configured){console.warn('Términos: falta configurar la URL de Apps Script en /assets/terminos.js');return}
-  let id;
-  try{
-    const r=await fetch('/cdn-cgi/access/get-identity',{credentials:'same-origin'});
-    if(!r.ok) return;                       // sin sesión iniciada: no se muestra nada
-    id=await r.json();
-  }catch(e){return}
-  if(!id||!id.email) return;
-  id.email=String(id.email).toLowerCase();
-  if(store.get(KEY(id.email))) return;      // ya firmó en este navegador
-
-  const o=overlay();
-  o.innerHTML='<div class="terms-card terms-wait"><p>Verificando…</p></div>';
-  try{
-    const r=await fetch(CONFIG.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'check',email:id.email,version:CONFIG.version})});
-    const j=await r.json();
-    if(j.signed){store.set(KEY(id.email),'1');close(o);return}
-  }catch(e){
-    console.warn('Términos: no se pudo verificar la firma',e);
-    close(o);return;                        // si Google no responde, no bloquear el trabajo
-  }
-  showForm(o,id);
-}
-init();
+showForm(overlay(),ID);
 })();

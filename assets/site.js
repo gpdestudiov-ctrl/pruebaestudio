@@ -91,6 +91,4 @@ if(c){
   draw();addEventListener('resize',draw);document.fonts&&document.fonts.ready.then(draw);
 }
 
-/* Términos de uso: se cargan en todas las páginas */
-const t=document.createElement('script');t.src='/assets/terminos.js';t.defer=true;document.head.appendChild(t);
 })();
