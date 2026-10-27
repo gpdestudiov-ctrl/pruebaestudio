@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi perfil · Videla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="/" aria-label="Videla Estudio Jurídico, Central de Gestión">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-word"><b>VIDELA</b><small>Estudio Jurídico</small></span>
+    </a>
+    <span class="bar-title">Mi perfil</span>
+    <nav class="bar-nav" aria-label="Secciones">
+      <a href="#datos">Mis datos</a>
+      <a href="#documento">Documento firmado</a>
+    </nav>
+  </div>
+</header>
+
+<div class="strip" id="top" aria-hidden="true"></div>
+<div class="crumb"><a href="/">Central de Gestión</a> / Mi perfil</div>
+<main>
+  <section class="intro">
+    <h2>MI PERFIL</h2>
+    <p>Tus datos en la Central de Gestión y la copia del acuerdo que firmaste.</p>
+  </section>
+
+  <section class="sec" id="datos">
+    <h3>Mis datos</h3>
+    <dl class="perfil-datos" id="datos-lista">
+      <dt>Cargando…</dt><dd></dd>
+    </dl>
+  </section>
+
+  <section class="sec" id="documento">
+    <h3>Documento firmado</h3>
+    <div class="acciones"><button class="copy" type="button" id="imprimir">Imprimir / guardar PDF</button></div>
+    <div class="doc-firmado terms-card" id="documento-firmado"></div>
+  </section>
+
+<script>
+(async function(){
+  const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const dl=document.getElementById('datos-lista'), doc=document.getElementById('documento-firmado');
+  let p={};
+  try{p=await (await fetch('/api/perfil',{credentials:'same-origin'})).json()}catch(e){}
+  const f=p.firma||{};
+  const fila=(k,v)=>`<dt>${k}</dt><dd>${v}</dd>`;
+  const nd='<span class="tile-note">No disponible</span>';
+  dl.innerHTML=
+    fila('Nombre y apellido', f.nombre?esc(f.nombre):nd)+
+    fila('Cuenta de Google', esc(p.email||''))+
+    fila('Perfil', esc(p.perfilNombre||''))+
+    fila('DNI', f.dni?esc(f.dni):nd)+
+    fila('Domicilio', f.domicilio?esc(f.domicilio):nd)+
+    fila('Términos de uso', p.firmado
+      ? `<span class="flag ok">✓ Firmado</span> versión ${esc(p.version)}${f.fechaRegistro?' · '+esc(f.fechaRegistro):''}`
+      : `<span class="flag no">✗ Sin firmar</span>`);
+  doc.dataset.email=p.email||''; doc.dataset.version=p.version||'';
+  for(const k of ['nombre','dni','domicilio','ciudadFecha','fechaRegistro']) if(f[k]) doc.dataset[k]=f[k];
+  const s=document.createElement('script');s.src='/assets/terminos.js';document.body.appendChild(s);
+  document.getElementById('imprimir').addEventListener('click',()=>print());
+})();
+</script>
+</main>
+
+<footer><div><span>Videla · Estudio Jurídico</span><span>Uso interno del equipo</span></div></footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
