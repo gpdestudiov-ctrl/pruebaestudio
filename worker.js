@@ -37,11 +37,12 @@ export default {
     const expected = await cookieValue(env, email, version);
     if (getCookie(request, COOKIE) === expected) return serve(request, env, email, url);
 
-    let signed;
-    try {
+    // Registro propio de firmas (KV): no depende de la planilla.
+    let signed = !!(await leerFirma(env, email, version));
+    if (!signed) try {
       const r = await callScript(env, { action: 'check', email, version });
       if (!r.ok) throw new Error(r.error || 'check failed');
-      signed = r.signed;
+      signed = !!r.signed;
     } catch (e) {
       return html(errorPage(), 503);
     }
@@ -94,8 +95,8 @@ async function serve(request, env, email, url) {
   }
 
   if (url.pathname === '/api/perfil') {
-    let firma = null;
-    try {
+    let firma = await leerFirma(env, email, env.TERMS_VERSION);
+    if (!firma) try {
       const r = await callScript(env, { action: 'perfil', email, version: env.TERMS_VERSION });
       if (r && r.ok) firma = r.firma || r.data || null;
     } catch (e) {}
@@ -144,7 +145,21 @@ async function sign(request, env, email, version) {
   let r;
   try { r = await callScript(env, payload); } catch (e) { return json({ ok: false, error: 'No se pudo registrar' }, 502); }
   if (!r.ok) return json({ ok: false, error: r.error || 'No se pudo registrar' }, 400);
+  await guardarFirma(env, email, version, {
+    nombre: payload.nombre, dni: payload.dni, domicilio: payload.domicilio, ciudadFecha: payload.ciudadFecha,
+    fechaRegistro: new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', hour12: false }),
+  });
   return json({ ok: true }, 200, { 'Set-Cookie': setCookie(await cookieValue(env, email, version)) });
+}
+
+/* ── Registro de firmas en Workers KV (binding FIRMAS). Clave: firma:<email>|<versión> ── */
+async function leerFirma(env, email, version) {
+  if (!env.FIRMAS) return null;
+  try { return await env.FIRMAS.get(`firma:${email}|${version}`, 'json'); } catch (e) { return null; }
+}
+async function guardarFirma(env, email, version, data) {
+  if (!env.FIRMAS) return;
+  try { await env.FIRMAS.put(`firma:${email}|${version}`, JSON.stringify(data)); } catch (e) {}
 }
 
 async function callScript(env, body) {

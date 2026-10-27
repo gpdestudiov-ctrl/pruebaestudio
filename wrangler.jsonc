@@ -9,6 +9,10 @@
     "binding": "ASSETS",
     "run_worker_first": true
   },
+  // Registro de quién firmó los Términos (así no se vuelven a pedir)
+  "kv_namespaces": [
+    { "binding": "FIRMAS", "id": "dd102b1a36124e3792921cbab686999f" }
+  ],
   "vars": {
     "TERMS_VERSION": "1.1",
     "APPS_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbyeNH0Td-aQBMap2c6Wo7wg7mMVSQcqUyRhnOJaAzn-yI4MVmjGY4acWJTVjP7V3VhReA/exec",
