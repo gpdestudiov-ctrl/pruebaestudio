@@ -3,10 +3,12 @@
    todavía no firmó la versión vigente. Al firmar, el Worker registra los datos
    en Google Sheets y habilita el acceso al resto del sitio. */
 (function(){
-const root = document.getElementById('terminos');
-if(!root) return;
-const ID = { email: root.dataset.email || '' };
-const CONFIG = { version: root.dataset.version || '', fechaVersion: '19 oct 2026' };
+const root = document.getElementById('terminos');            // página de aceptación (la entrega el Worker)
+const docEl = document.getElementById('documento-firmado');   // "Mi perfil": copia del documento firmado
+if(!root && !docEl) return;
+const src = root || docEl;
+const ID = { email: src.dataset.email || '' };
+const CONFIG = { version: src.dataset.version || '', fechaVersion: '19 oct 2026' };
 
 const TEXT = `
 <p>Antes de acceder a la Central de Gestión te pedimos que leas y aceptes estos términos, que tienen validez de acuerdo entre vos y el Estudio Jurídico Videla (en adelante, "el Estudio").</p>
@@ -156,5 +158,25 @@ function showForm(o,id){
   });
 }
 
-showForm(overlay(),ID);
+/* Copia del documento firmado (Mi perfil). Los datos llegan en data-* desde /api/perfil. */
+function showDoc(el){
+  const d=el.dataset, v=k=>d[k]?esc(d[k]):'<span class="tile-note">No disponible</span>';
+  el.innerHTML=`<header class="terms-head">
+      <small>Central de Gestión · Estudio Jurídico Videla · Versión ${esc(CONFIG.version)} · ${esc(CONFIG.fechaVersion)}</small>
+      <h2>Términos de uso y acuerdo de confidencialidad</h2>
+    </header>
+    <div class="terms-body">${TEXT}</div>
+    <div class="firma">
+      <h3>Aceptación</h3>
+      <p><b>Nombre y apellido:</b> ${v('nombre')}</p>
+      <p><b>DNI:</b> ${v('dni')}</p>
+      <p><b>Domicilio:</b> ${v('domicilio')}</p>
+      <p><b>Ciudad y fecha:</b> ${v('ciudadFecha')}</p>
+      <p><b>Cuenta de Google:</b> ${esc(ID.email)}</p>
+      <p><b>Registrado el:</b> ${v('fechaRegistro')}</p>
+    </div>`;
+}
+
+if(root) showForm(overlay(),ID); else showDoc(docEl);
+window.CG_mostrarDocumento=()=>showDoc(docEl);
 })();

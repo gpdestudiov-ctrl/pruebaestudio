@@ -26,15 +26,21 @@ const ICONS = {
   shuffle:`<rect x="16" y="30" width="36" height="36" rx="6" fill="${W}" ${S} transform="rotate(-12 34 48)"/><rect x="48" y="36" width="36" height="36" rx="6" fill="${F}" ${S} transform="rotate(10 66 54)"/><circle cx="27" cy="42" r="2.6" fill="var(--icon-stroke)"/><circle cx="37" cy="52" r="2.6" fill="var(--icon-stroke)"/><circle cx="59" cy="46" r="2.6" fill="var(--icon-stroke)"/><circle cx="67" cy="55" r="2.6" fill="var(--icon-stroke)"/><circle cx="75" cy="64" r="2.6" fill="var(--icon-stroke)"/><path d="M30 20 q20 -10 40 4" fill="none" ${S}/><path d="M64 16l7 8-9 3" fill="none" ${S}/>`,
   docreq:`<path d="M24 16 h32 l14 14 v54 h-46 Z" fill="${W}" ${S}/><path d="M56 16 v14 h14" fill="${B}" ${S}/><path d="M32 42h26M32 50h26M32 58h16" fill="none" ${S}/><circle cx="70" cy="74" r="12" fill="${F}" ${S}/><path d="M70 68v12M65 75l5 5 5-5" fill="none" ${S}/>`,
   calc:`<rect x="26" y="14" width="48" height="72" rx="6" fill="${B}" ${S}/><rect x="33" y="22" width="34" height="16" rx="2" fill="${W}" ${S}/><path d="M56 30h6" fill="none" ${S}/><g fill="${F}" ${S}><rect x="33" y="46" width="9" height="8" rx="2"/><rect x="46" y="46" width="9" height="8" rx="2"/><rect x="59" y="46" width="8" height="8" rx="2"/><rect x="33" y="60" width="9" height="8" rx="2"/><rect x="46" y="60" width="9" height="8" rx="2"/><rect x="59" y="60" width="8" height="20" rx="2"/><rect x="33" y="72" width="22" height="8" rx="2"/></g>`,
+  about:`<path d="M50 24 Q34 14 16 18 V78 Q34 74 50 84 Z" fill="${W}" ${S}/><path d="M50 24 Q66 14 84 18 V78 Q66 74 50 84 Z" fill="${F}" ${S}/><path d="M24 34q10-2 18 2M24 46q10-2 18 2M24 58q10-2 18 2" fill="none" ${S}/><path d="M60 26v22l6-5 6 5V22" fill="${R}" ${S}/>`,
+  status:`<rect x="18" y="16" width="52" height="68" rx="5" fill="${W}" ${S}/><path d="M28 32h32M28 44h24M28 56h28M28 68h16" fill="none" ${S}/><circle cx="70" cy="68" r="16" fill="${B}" ${S}/><path d="M70 60v9l6 4" fill="none" ${S}/>`,
 };
 
 const GRID24=new Set(['court','mail','deal','case','folder','social','tax','client','request','track','learn','coin']);
 function ico(name){const vb=GRID24.has(name)?'0 0 24 24':'0 0 100 100';return `<svg class="ico" viewBox="${vb}" aria-hidden="true">${ICONS[name]||''}</svg>`}
 function linkAttrs(url){return url.startsWith('/')||url.startsWith('#')?`href="${url}"`:`href="${url}" target="_blank" rel="noopener"`}
 
+const CG=window.CG||null;
+/* Tarjetas con "id": se muestran solo si el perfil de quien entra incluye esa sección. */
+const visible=a=>!CG||!a.id||CG.secciones.includes(a.id);
+
 const grid=document.getElementById('grid');
 if(grid && window.ACCESOS){
-  for(const a of window.ACCESOS){
+  for(const a of window.ACCESOS.filter(visible)){
     const li=document.createElement('li');
     li.innerHTML = a.url
       ? `<a class="tile" ${linkAttrs(a.url)}>${ico(a.icon)}<span class="tile-name">${a.name}</span></a>`
@@ -50,6 +56,37 @@ if(docs && window.DOCS){
       ? `<a ${linkAttrs(d.url)}>${d.name}</a>`
       : `<span>${d.name}</span><span class="tile-note">Enlace pendiente</span>`;
     docs.appendChild(li);
+  }
+}
+
+/* Barra de usuario: perfil, salir y (super administradores) ver como */
+const barIn=document.querySelector('.bar-in');
+if(barIn && CG){
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const u=document.createElement('div');u.className='bar-user';
+  let h='';
+  if(CG.super && CG.perfiles){
+    h+=`<label class="vercomo" title="Ver la Central como la ve cada perfil"><span>Ver como</span><select id="vercomo">`;
+    for(const [k,n] of Object.entries(CG.perfiles)) h+=`<option value="${k}"${k===CG.perfil?' selected':''}>${esc(n)}</option>`;
+    h+=`</select></label>`;
+  }
+  if(CG.admin) h+=`<a href="/admin/">Usuarios</a>`;
+  h+=`<a href="/perfil/" title="${esc(CG.email)}">Mi perfil</a><a href="/cdn-cgi/access/logout" class="logout">Salir</a>`;
+  u.innerHTML=h;barIn.appendChild(u);
+  const sel=document.getElementById('vercomo');
+  if(sel) sel.addEventListener('change',async()=>{
+    sel.disabled=true;
+    try{await fetch('/api/vercomo',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({perfil:sel.value})})}catch(e){}
+    location.href='/';
+  });
+  if(CG.viendoComo){
+    const b=document.createElement('div');b.className='vercomo-banner';
+    b.innerHTML=`<span>Estás viendo la Central como: <b>${esc(CG.perfilNombre)}</b></span><button type="button">Volver a mi vista</button>`;
+    document.querySelector('.bar').after(b);
+    b.querySelector('button').addEventListener('click',async()=>{
+      try{await fetch('/api/vercomo',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({perfil:null})})}catch(e){}
+      location.reload();
+    });
   }
 }
 

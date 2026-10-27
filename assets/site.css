@@ -177,3 +177,62 @@ html.terms-open,html.terms-open body{overflow:hidden}
   .terms-fields{grid-template-columns:1fr}
 }
 .terms-card:focus{outline:none}
+
+/* ── Usuario: perfil, salir, ver como ── */
+.bar-user{display:flex;align-items:center;gap:16px;font-size:14px;letter-spacing:.04em;white-space:nowrap}
+.bar-nav + .bar-user{margin-left:0}
+.bar-in > .bar-title + .bar-user{margin-left:auto}
+.bar-user a{text-decoration:none;opacity:.8}
+.bar-user a:hover{opacity:1;color:var(--gold)}
+.bar-user .logout{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 12px;opacity:1}
+.bar-user .logout:hover{border-color:var(--gold)}
+.vercomo{display:flex;align-items:center;gap:6px;color:var(--gold)}
+.vercomo span{font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.vercomo select{font:inherit;font-size:13px;background:#1d2530;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:3px 6px;max-width:220px}
+.vercomo-banner{background:var(--gold);color:#131417;font-size:14.5px}
+.vercomo-banner{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:center;padding:8px 20px}
+.vercomo-banner button{font:inherit;font-size:13px;font-weight:600;background:#131417;color:#fff;border:0;border-radius:999px;padding:4px 14px;cursor:pointer}
+@media (max-width:900px){
+  .bar-in{flex-wrap:wrap;row-gap:10px}
+  .bar-user{margin-left:auto}
+}
+@media (max-width:640px){
+  .bar-user{width:100%;min-width:0;margin-left:0;justify-content:flex-end;gap:12px;font-size:13px}
+  .vercomo{margin-right:auto;min-width:0;flex:1 1 auto}
+  .vercomo span{display:none}
+  .vercomo select{width:100%;max-width:200px;min-width:0}
+}
+
+/* ── Sub-páginas: franja fina en lugar de la imagen ── */
+.strip{height:20px;background:radial-gradient(120% 400% at 70% 20%,var(--hero-b),var(--hero-a));border-bottom:3px solid var(--gold)}
+
+/* ── Mi perfil ── */
+.perfil-datos{margin:26px 0 0;display:grid;grid-template-columns:max-content 1fr;gap:10px 18px;padding-bottom:26px;border-bottom:1px solid var(--rule)}
+.perfil-datos dt{font-weight:600}
+.perfil-datos dd{margin:0;word-break:break-word}
+@media (max-width:560px){.perfil-datos{grid-template-columns:1fr;gap:2px}.perfil-datos dd{margin-bottom:10px}}
+.flag{display:inline-flex;align-items:center;gap:6px;font-weight:600;border-radius:999px;padding:2px 12px;font-size:14px}
+.flag.ok{background:#e3f1e4;color:#1f5f28}
+.flag.no{background:#fbe4e1;color:#8c2a1e}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .flag.ok{background:#1e3a22;color:#a8dbb0}:root:not([data-theme="light"]) .flag.no{background:#4a2420;color:#f0b5ab}}
+:root[data-theme="dark"] .flag.ok{background:#1e3a22;color:#a8dbb0}
+:root[data-theme="dark"] .flag.no{background:#4a2420;color:#f0b5ab}
+.doc-firmado{margin-top:30px;border:1px solid var(--rule);border-radius:14px;background:var(--surface);max-height:70vh;overflow:auto}
+.doc-firmado .terms-body{padding:8px 28px 18px}
+.doc-firmado .firma{border-top:1px solid var(--rule);background:var(--tile-bg);padding:16px 28px 22px;font-size:15px}
+.doc-firmado .firma h3{font-family:var(--display);font-size:18px;margin:6px 0 10px}
+.doc-firmado .firma p{margin:4px 0}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+@media print{.bar,.strip,.crumb,footer,.acciones,.vercomo-banner{display:none!important}.doc-firmado{max-height:none;border:0}}
+
+/* ── Usuarios y perfiles ── */
+.tabla-wrap{overflow-x:auto;margin-top:26px}
+.tabla{width:100%;border-collapse:collapse;font-size:15px}
+.tabla th,.tabla td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+.tabla th{font-family:var(--display);color:var(--olive);font-weight:700;letter-spacing:.03em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--tile-bg);border:1px solid var(--rule);border-radius:999px;padding:1px 10px;font-size:13px}
+.nota{color:var(--muted);font-size:14.5px;max-width:70ch}
+.nota code{background:var(--tile-bg);padding:1px 6px;border-radius:5px}
+.doc-firmado.terms-card{max-width:none;box-shadow:none}
+@media (max-width:1100px){.bar-in{flex-wrap:wrap;row-gap:10px}}
