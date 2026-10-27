@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Acerca de · Videla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="/" aria-label="Videla Estudio Jurídico, Central de Gestión">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-word"><b>VIDELA</b><small>Estudio Jurídico</small></span>
+    </a>
+    <span class="bar-title">Acerca de</span>
+    <nav class="bar-nav" aria-label="Secciones">
+      <a href="#estudio">El Estudio</a>
+      <a href="#playbook">Playbook</a>
+      <a href="#leyes">Leyes</a>
+    </nav>
+  </div>
+</header>
+
+<div class="strip" id="top" aria-hidden="true"></div>
+<div class="crumb"><a href="/">Central de Gestión</a> / Acerca de</div>
+<main>
+  <section class="intro">
+    <h2>ACERCA DE</h2>
+    <p>Todo lo que necesitás saber del Estudio en un solo lugar: quiénes somos, cómo trabajamos y la normativa con la que trabajamos todos los días.</p>
+  </section>
+
+  <section class="sec" id="estudio">
+    <h3>El Estudio</h3>
+    <ul class="docs" id="docs-estudio"></ul>
+  </section>
+
+  <section class="sec" id="playbook">
+    <h3>Playbook: cómo trabajamos</h3>
+    <ul class="docs" id="docs-playbook"></ul>
+  </section>
+
+  <section class="sec" id="leyes">
+    <h3>Leyes y normativa</h3>
+    <ul class="docs" id="docs-leyes"></ul>
+  </section>
+
+<script>
+/* ── Documentos: editá aquí nombres y enlaces. url: null = enlace pendiente ── */
+window.ACERCA = {
+ "docs-estudio": [
+  {"name": "Quiénes somos", "url": null},
+  {"name": "Organigrama y referentes de cada área", "url": null}
+ ],
+ "docs-playbook": [
+  {"name": "Playbook general del Estudio", "url": null},
+  {"name": "Protocolos de trabajo", "url": null}
+ ],
+ "docs-leyes": [
+  {"name": "Ley 24.241 · Sistema Integrado de Jubilaciones y Pensiones", "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/0-4999/639/texact.htm"},
+  {"name": "Ley 20.628 · Impuesto a las Ganancias", "url": null},
+  {"name": "Ley 25.326 · Protección de Datos Personales", "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/60000-64999/64790/texact.htm"}
+ ]
+};
+document.addEventListener('DOMContentLoaded',()=>{
+  for(const [id,list] of Object.entries(window.ACERCA)){
+    const ul=document.getElementById(id); if(!ul) continue;
+    for(const d of list){
+      const li=document.createElement('li');
+      if(d.url){const a=document.createElement('a');a.href=d.url;a.target='_blank';a.rel='noopener';a.textContent=d.name;li.appendChild(a)}
+      else{li.innerHTML='<span></span><span class="tile-note">Enlace pendiente</span>';li.firstChild.textContent=d.name}
+      ul.appendChild(li);
+    }
+  }
+});
+</script>
+</main>
+
+<footer><div><span>Videla · Estudio Jurídico</span><span>Uso interno del equipo</span></div></footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
