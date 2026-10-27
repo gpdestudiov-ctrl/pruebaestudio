@@ -69,6 +69,8 @@ if(barIn && CG){
     h+=`<label class="vercomo" title="Ver la Central como la ve cada perfil"><span>Ver como</span><select id="vercomo">`;
     for(const [k,n] of Object.entries(CG.perfiles)) h+=`<option value="${k}"${k===CG.perfil?' selected':''}>${esc(n)}</option>`;
     h+=`</select></label>`;
+  } else {
+    h+=`<span class="perfil-tag">${esc(CG.perfilEtiqueta||CG.perfilNombre)}</span>`;
   }
   if(CG.admin) h+=`<a href="/admin/">Usuarios</a>`;
   h+=`<a href="/perfil/" title="${esc(CG.email)}">Mi perfil</a><a href="/cdn-cgi/access/logout" class="logout">Salir</a>`;

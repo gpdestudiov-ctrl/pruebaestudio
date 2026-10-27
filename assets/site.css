@@ -236,3 +236,7 @@ html.terms-open,html.terms-open body{overflow:hidden}
 .nota code{background:var(--tile-bg);padding:1px 6px;border-radius:5px}
 .doc-firmado.terms-card{max-width:none;box-shadow:none}
 @media (max-width:1100px){.bar-in{flex-wrap:wrap;row-gap:10px}}
+
+/* Perfil de quien entra (en lugar de "Ver como") */
+.perfil-tag{color:var(--gold);font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+@media (max-width:640px){.perfil-tag{margin-right:auto}}
