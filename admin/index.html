@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Usuarios y perfiles · Videla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Roboto+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="/" aria-label="Videla Estudio Jurídico, Central de Gestión">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-word"><b>VIDELA</b><small>Estudio Jurídico</small></span>
+    </a>
+    <span class="bar-title">Usuarios y perfiles</span>
+    <nav class="bar-nav" aria-label="Secciones">
+      <a href="#personas">Personas</a>
+      <a href="#perfiles">Perfiles</a>
+    </nav>
+  </div>
+</header>
+
+<div class="strip" id="top" aria-hidden="true"></div>
+<div class="crumb"><a href="/">Central de Gestión</a> / Usuarios y perfiles</div>
+<main>
+  <section class="intro">
+    <h2>USUARIOS Y PERFILES</h2>
+    <p>Quién ve qué en la Central de Gestión. Solo lo ven los super administradores.</p>
+  </section>
+
+  <section class="sec" id="personas">
+    <h3>Personas</h3>
+    <p class="nota" style="margin-top:18px">Para sumar o cambiar a alguien, editá el archivo <code>perfiles.js</code> del repositorio (una línea por persona: mail y perfil). Quien entre y no esté en la lista ve el perfil por defecto: <b id="por-defecto"></b>. Para probar cómo lo ve cada perfil, usá <b>Ver como</b> arriba a la derecha.</p>
+    <div class="tabla-wrap"><table class="tabla"><thead><tr><th>Cuenta</th><th>Perfil</th></tr></thead><tbody id="t-personas"></tbody></table></div>
+  </section>
+
+  <section class="sec" id="perfiles">
+    <h3>Perfiles</h3>
+    <div class="tabla-wrap"><table class="tabla"><thead><tr><th>Perfil</th><th>Clave</th><th>Ve</th></tr></thead><tbody id="t-perfiles"></tbody></table></div>
+  </section>
+
+<script>
+(async function(){
+  const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let d; try{d=await (await fetch('/api/usuarios',{credentials:'same-origin'})).json()}catch(e){}
+  if(!d||!d.ok){document.getElementById('t-personas').innerHTML='<tr><td colspan="2">No se pudo cargar.</td></tr>';return}
+  document.getElementById('por-defecto').textContent=d.perfiles[d.porDefecto].nombre;
+  const n=k=>d.perfiles[k]?d.perfiles[k].nombre:k;
+  const filas=Object.entries(d.usuarios).sort((a,b)=>n(a[1]).localeCompare(n(b[1]))||a[0].localeCompare(b[0]));
+  document.getElementById('t-personas').innerHTML=filas.map(([m,p])=>`<tr><td>${esc(m)}</td><td>${esc(n(p))}</td></tr>`).join('');
+  document.getElementById('t-perfiles').innerHTML=Object.entries(d.perfiles).map(([k,p])=>
+    `<tr><td><b>${esc(p.nombre)}</b></td><td><code>${esc(k)}</code></td><td><div class="chips">${
+      (p.secciones.length===Object.keys(d.secciones).length?['Home entera']:p.secciones.map(s=>d.secciones[s]?d.secciones[s].nombre:s)).map(x=>`<span class="chip">${esc(x)}</span>`).join('')
+    }${p.super?'<span class="chip">Ver como · Usuarios</span>':''}</div></td></tr>`).join('');
+})();
+</script>
+</main>
+
+<footer><div><span>Videla · Estudio Jurídico</span><span>Uso interno del equipo</span></div></footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
