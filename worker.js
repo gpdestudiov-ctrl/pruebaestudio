@@ -4,9 +4,16 @@
    2. Si esa cuenta no firmó la versión vigente de los términos, solo muestra
       la página de aceptación; el resto del sitio no se entrega.
    3. La firma se registra en Google Sheets a través de Apps Script, con un
-      secreto compartido (TERMS_SECRET) que solo conocen este Worker y el script. */
+      secreto compartido (TERMS_SECRET) que solo conocen este Worker y el script.
+   4. Según el perfil de la persona (perfiles.js) decide qué secciones puede abrir
+      y le pasa a la página la lista de tarjetas que tiene que mostrar.
+      Los super administradores pueden "ver como" cualquier perfil. */
+
+import { PERFILES, SECCIONES, USUARIOS, PERFIL_POR_DEFECTO, perfilDe } from './perfiles.js';
 
 const COOKIE = 'cg_terminos';
+const VERCOMO = 'cg_vercomo';      // perfil elegido por un super administrador para "ver como"
+const LIBRES = ['/', '/index.html', '/perfil/', '/acerca/', '/aprendizaje/']; // rutas que ve cualquier perfil (acerca y aprendizaje están en la base)
 const PUBLIC_PATHS = new Set(['/assets/site.css', '/assets/terminos.js']); // necesarios para la página de términos
 
 export default {
@@ -28,7 +35,7 @@ export default {
 
     // ¿Ya firmó? Primero la cookie firmada; si no está, se consulta la planilla.
     const expected = await cookieValue(env, email, version);
-    if (getCookie(request, COOKIE) === expected) return env.ASSETS.fetch(request);
+    if (getCookie(request, COOKIE) === expected) return serve(request, env, email, url);
 
     let signed;
     try {
@@ -39,7 +46,7 @@ export default {
       return html(errorPage(), 503);
     }
     if (signed) {
-      const res = await env.ASSETS.fetch(request);
+      const res = await serve(request, env, email, url);
       const out = new Response(res.body, res);
       out.headers.append('Set-Cookie', setCookie(expected));
       return out;
@@ -50,6 +57,79 @@ export default {
     return html(gatePage(email, version), 200);
   }
 };
+
+/* ── Perfiles: qué ve cada uno ── */
+function quienEs(request, email) {
+  const real = perfilDe(email);
+  const esSuper = !!PERFILES[real].super;
+  const vc = esSuper ? getCookie(request, VERCOMO) : null;
+  const efectivo = vc && PERFILES[vc] ? vc : real;
+  return { real, esSuper, efectivo, viendoComo: efectivo !== real ? efectivo : null };
+}
+
+function puedeVer(pathname, perfil) {
+  const p = pathname.endsWith('/') ? pathname : pathname.replace(/\/index\.html$/, '/');
+  if (/^\/(perfiles|worker)\.js$|^\/wrangler\.jsonc$/.test(p)) return false;
+  if (p.startsWith('/assets/') || LIBRES.includes(p)) return true;
+  if (p.startsWith('/admin')) return !!PERFILES[perfil].super;
+  const secs = PERFILES[perfil].secciones;
+  for (const [id, s] of Object.entries(SECCIONES)) {
+    if (!s.ruta) continue;
+    const base = s.ruta.replace(/\/$/, '');
+    if (p === base || p.startsWith(base + '/')) return secs.includes(id);
+  }
+  return true; // otros archivos sueltos del sitio
+}
+
+async function serve(request, env, email, url) {
+  const q = quienEs(request, email);
+
+  if (url.pathname === '/api/vercomo') {
+    if (request.method !== 'POST' || !q.esSuper) return text('No autorizado', 403);
+    let d = {}; try { d = await request.json(); } catch (e) {}
+    const p = PERFILES[d.perfil] && d.perfil !== q.real ? d.perfil : null;
+    return json({ ok: true }, 200, { 'Set-Cookie': p
+      ? `${VERCOMO}=${p}; Path=/; Max-Age=28800; HttpOnly; Secure; SameSite=Lax`
+      : `${VERCOMO}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax` });
+  }
+
+  if (url.pathname === '/api/perfil') {
+    let firma = null;
+    try {
+      const r = await callScript(env, { action: 'perfil', email, version: env.TERMS_VERSION });
+      if (r && r.ok) firma = r.firma || r.data || null;
+    } catch (e) {}
+    return json({ ok: true, email, version: env.TERMS_VERSION, perfil: q.real, perfilNombre: PERFILES[q.real].nombre, firmado: true, firma });
+  }
+
+  if (url.pathname === '/api/usuarios') {
+    if (!PERFILES[q.efectivo].super) return text('No autorizado', 403);
+    return json({ ok: true, perfiles: PERFILES, secciones: SECCIONES, usuarios: USUARIOS, porDefecto: PERFIL_POR_DEFECTO });
+  }
+
+  if (!puedeVer(url.pathname, q.efectivo)) {
+    return new Response(null, { status: 302, headers: { Location: '/', 'Cache-Control': 'no-store' } });
+  }
+
+  const res = await env.ASSETS.fetch(request);
+  if (!(res.headers.get('Content-Type') || '').includes('text/html')) return res;
+
+  const CG = {
+    email,
+    perfil: q.efectivo,
+    perfilNombre: PERFILES[q.efectivo].nombre,
+    secciones: PERFILES[q.efectivo].secciones,
+    admin: !!PERFILES[q.efectivo].super,
+    super: q.esSuper,
+    viendoComo: q.viendoComo,
+    perfiles: q.esSuper ? Object.fromEntries(Object.entries(PERFILES).map(([k, v]) => [k, v.nombre])) : null,
+  };
+  const script = `<script>window.CG=${JSON.stringify(CG).replace(/</g, '\\u003c')};</script>`;
+  const out = new HTMLRewriter().on('head', { element(e) { e.append(script, { html: true }); } }).transform(res);
+  const h = new Response(out.body, out);
+  h.headers.set('Cache-Control', 'no-store');
+  return h;
+}
 
 async function sign(request, env, email, version) {
   let d;
