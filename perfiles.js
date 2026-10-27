@@ -24,15 +24,15 @@ export const SECCIONES = {
 const BASE = ['acerca', 'aprendizaje'];
 const TODO = Object.keys(SECCIONES);
 
-/* Perfiles: qué secciones ve cada uno. */
+/* Perfiles: qué secciones ve cada uno. "etiqueta" es lo que se ve en dorado arriba a la derecha. */
 export const PERFILES = {
-  base:       { nombre: 'Base (todos)',                        secciones: BASE },
-  prof_a:     { nombre: 'Profesionales A · Seguridad Social',  secciones: [...BASE, 'seg-social'] },
-  prof_b:     { nombre: 'Profesionales B · Ganancias',         secciones: [...BASE, 'ganancias'] },
-  prof_c:     { nombre: 'Profesionales C · Mix (SS + Ganancias)', secciones: [...BASE, 'seg-social', 'ganancias'] },
-  ventas:     { nombre: 'Vendedoras',                          secciones: [...BASE, 'ventas'] },
-  admin:      { nombre: 'Plataforma administrativa',           secciones: TODO },
-  superadmin: { nombre: 'Super administrador',                 secciones: TODO, super: true },
+  base:       { etiqueta: 'General',                   nombre: 'Base (todos)',                        secciones: BASE },
+  prof_a:     { etiqueta: 'Seguridad Social',          nombre: 'Profesionales A · Seguridad Social',  secciones: [...BASE, 'seg-social'] },
+  prof_b:     { etiqueta: 'Ganancias',                 nombre: 'Profesionales B · Ganancias',         secciones: [...BASE, 'ganancias'] },
+  prof_c:     { etiqueta: 'Seguridad Social y Ganancias', nombre: 'Profesionales C · Mix (SS + Ganancias)', secciones: [...BASE, 'seg-social', 'ganancias'] },
+  ventas:     { etiqueta: 'Ventas',                    nombre: 'Vendedoras',                          secciones: [...BASE, 'ventas'] },
+  admin:      { etiqueta: 'Plataforma administrativa', nombre: 'Plataforma administrativa',           secciones: TODO },
+  superadmin: { etiqueta: 'Super administrador',       nombre: 'Super administrador',                 secciones: TODO, super: true },
 };
 
 /* Perfil para quien entra y todavía no está en la lista. */

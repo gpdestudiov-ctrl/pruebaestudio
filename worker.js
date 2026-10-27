@@ -119,6 +119,7 @@ async function serve(request, env, email, url) {
     email,
     perfil: q.efectivo,
     perfilNombre: PERFILES[q.efectivo].nombre,
+    perfilEtiqueta: PERFILES[q.efectivo].etiqueta || PERFILES[q.efectivo].nombre,
     secciones: PERFILES[q.efectivo].secciones,
     admin: !!PERFILES[q.efectivo].super,
     super: q.esSuper,
