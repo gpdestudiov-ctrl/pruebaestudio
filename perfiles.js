@@ -43,6 +43,7 @@ export const USUARIOS = {
   // ── Super administradores (ven todo y pueden "ver como" cualquier perfil)
   'joaquinavidela@gmail.com': 'superadmin',
   'gpd.estudiov@gmail.com':   'superadmin',
+   'diego@somosfuco.com.ar':   'superadmin',
   
 
   // ── Plataforma administrativa: Lucas / Adriel / Florencia / Malvina / Diego / Joaqui / etc.
