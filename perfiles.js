@@ -58,6 +58,7 @@ export const USUARIOS = {
 
   // ── Profesionales A (solo Seguridad Social): Dalila
   // 'dalila@...': 'prof_a',
+      'diego@digo.com.ar':   'prof_a'
 
   // ── Profesionales B (solo Ganancias): el resto de los profesionales
   // 'nombre@...': 'prof_b',
