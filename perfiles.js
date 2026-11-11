@@ -47,8 +47,8 @@ export const USUARIOS = {
   
 
   // ── Plataforma administrativa: Lucas / Adriel / Florencia / Malvina / Diego / Joaqui / etc.
-  // 'lucas@...':     'admin',
-  // 'adriel@...':    'admin',
+      'lucasvi@cavizo.com.ar':     'admin',
+      'adriestudiovidela@gmail.com':    'admin',
   // 'florencia@...': 'admin',
   // 'malvina@...':   'admin',
 
